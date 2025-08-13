@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Customer Support Website</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #121212;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #1f1f1f;
+      padding: 25px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: 700;
+      color: #00c6ff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .section {
+      width: 100%;
+    }
+
+    .section h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 32px;
+      color: #00c6ff;
+    }
+
+    .services {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .service-item {
+      background-color: #1f1f1f;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+      width: 31%;
+      text-align: center;
+      border: 2px solid #00c6ff;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .service-item:hover {
+      transform: translateY(-5px);
+      border-color: #00ffcc;
+    }
+
+    .service-item h3 {
+      color: #00c6ff;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .service-item p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #dcdcdc;
+    }
+
+    /* Chatbox Styling */
+    #chatbox {
+      width: 360px;
+      height: 540px;
+      background-color: #1e1e1e;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 1000;
+    }
+
+    #header {
+      background-color: #00c6ff;
+      color: #121212;
+      text-align: center;
+      padding: 16px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    #welcomeMessage {
+      background-color: #292929;
+      text-align: center;
+      padding: 12px;
+      font-size: 14px;
+      color: #bfbfbf;
+    }
+
+    #messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background-color: #2a2a2a;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .message.sent {
+      align-items: flex-end;
+    }
+
+    .message.received {
+      align-items: flex-start;
+    }
+
+    .message .bubble {
+      padding: 12px 18px;
+      border-radius: 20px;
+      font-size: 14px;
+      max-width: 80%;
+      line-height: 1.4;
+      background: linear-gradient(145deg, #3a3a3a, #444);
+      color: #fff;
+    }
+
+    .message.sent .bubble {
+      background: linear-gradient(145deg, #00ff9d, #00d085);
+      color: #000;
+    }
+
+    .timestamp {
+      font-size: 10px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    #input-area {
+      display: flex;
+      padding: 15px;
+      background-color: #252525;
+      border-top: 1px solid #333;
+    }
+
+    #userInput {
+      flex: 1;
+      padding: 12px;
+      border-radius: 25px;
+      border: none;
+      outline: none;
+      background-color: #333;
+      color: #fff;
+      margin-right: 10px;
+    }
+
+    #sendButton {
+      background-color: #00c6ff;
+      color: #000;
+      border: none;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    #sendButton:active {
+      transform: scale(0.95);
+    }
+
+    #sendButton.loading {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes bubbleGrow {
+      0% { transform: scale(0); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+<header>Customer Support Center</header>
+
+<div class="content">
+  <div class="section services">
+    <div class="service-item">
+      <h3>Live Support</h3>
+      <p>Connect with our expert team to resolve your queries in real-time.</p>
+    </div>
+    <div class="service-item">
+      <h3>Knowledge Bases</h3>
+      <p>Explore our library of guides, FAQs, and articles to find answers you need.</p>
+    </div>
+    <div class="service-item">
+      <h3>Email Support</h3>
+      <p>Send us your detailed query via email, and we will get back to you promptly.</p>
+    </div>
+  </div>
+</div>
+
+<div id="chatbox">
+  <div id="header">Support Chat</div>
+  <div id="welcomeMessage">Hello! How can I assist you today?</div>
+  <div id="messages"></div>
+  <div id="input-area">
+    <input id="userInput" type="text" placeholder="Type your message..." onkeydown="handleKeyDown(event)" />
+    <button id="sendButton" onclick="sendMessage()">&#10148;</button>
+  </div>
+</div>
+
+<script>
+  async function sendMessage() {
+    const userInput = document.getElementById('userInput').value;
+    if (!userInput.trim()) return;
+
+    const sendButton = document.getElementById('sendButton');
+    sendButton.classList.add('loading');
+    sendButton.disabled = true;
+
+    addMessage(userInput, 'sent');
+    document.getElementById('userInput').value = '';
+
+    const apiKey = 'YOUR_OPENAI_API_KEY';
+    const apiUrl = 'https://api.openai.com/v1/chat/completions';
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: userInput }]
+      })
+    });
+
+    const data = await response.json();
+    const botMessage = data.choices[0].message.content;
+
+    addMessage(botMessage, 'received');
+    sendButton.classList.remove('loading');
+    sendButton.disabled = false;
+  }
+
+  function addMessage(content, type) {
+    const messages = document.getElementById('messages');
+    const message = document.createElement('div');
+    message.classList.add('message', type);
+
+    const bubble = document.createElement('div');
+    bubble.classList.add('bubble');
+    bubble.textContent = content;
+
+    const timestamp = document.createElement('div');
+    timestamp.classList.add('timestamp');
+    timestamp.textContent = new Date().toLocaleTimeString();
+
+    message.appendChild(bubble);
+    message.appendChild(timestamp);
+    messages.appendChild(message);
+
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === 'Enter') sendMessage();
+  }
+</script>
+
+</body>
+</html>
